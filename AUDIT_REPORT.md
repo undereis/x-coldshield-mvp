@@ -1,6 +1,6 @@
 # Original MVP audit and v0.2 remediation
 
-Audit target: original commit `ed5cfc68eb9e770626d8510d748f1dd41590d447` on `master`, 14 October 2026. The local checkout was clean and matched its tracked remote branch. The connected GitHub integration returned the original `master/x_coldshield_proxy.py`, matching the reviewed local source. All ten tracked files were inspected: four Python entrypoints, README, policy, two historical JSON samples and `.gitignore`. Local ignored skill instructions were also read; personal outreach/dossier files were excluded from the deliverable and retained locally.
+Audit target: original commit `ed5cfc68eb9e770626d8510d748f1dd41590d447` on `master`, 14 October 2026. The local checkout was clean and matched its tracked remote branch. The connected GitHub integration returned the original `master/x_coldshield_proxy.py`, matching the reviewed local source. All nine tracked files were inspected: four Python entrypoints, README, policy, two historical JSON samples and `.gitignore`. Local ignored skill instructions were also read; personal outreach/dossier files were excluded from the deliverable and retained locally.
 
 This is a source-based engineering audit with independent QA review, followed by laboratory regression testing. It is not a certified assessment or a full industrial security evaluation. Original line references below refer to the immutable baseline commit, not the rewritten files.
 

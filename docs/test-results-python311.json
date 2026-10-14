@@ -1,0 +1,16 @@
+{
+  "run_date_utc": "2026-10-14T23:03:20.270714+00:00",
+  "command": "python3.11 scripts/verify.py",
+  "python": "3.11.15",
+  "platform": "Darwin arm64",
+  "streamlit": "1.65.0",
+  "revision": "0343702fc221c351b598aac2fa4980cc869b3804",
+  "source_tree_sha256": "f67600a01e2561e8c54b7e48ffb20f21b443ac2c410533254ecea553c59a0f18",
+  "tests_run": 90,
+  "failures": 0,
+  "errors": 0,
+  "skipped": 0,
+  "successful": true,
+  "elapsed_seconds": 15.798727,
+  "scope": "loopback TCP, socketpair, isolated temporary files, mocked faults, headless Streamlit AppTest"
+}
