@@ -1,0 +1,27 @@
+Subject: Startup proposal: X ColdShield – OT Security Gateway for European Cold Chain (NIS 2)
+
+Dear Selection Team,
+
+I am writing to pitch X ColdShield, an early-stage DeepTech cybersecurity project built to protect legacy supermarket refrigeration and cold chain infrastructure against advanced remote attacks.
+
+Following the recent attacks on major European retail chains—where threat actors exploited unsegmented networks and legacy Danfoss controllers to force destructive thermal cycles—critical food supply chains are facing an urgent cyber threat.
+
+As a software architect and tech entrepreneur with 10 years of hands-on experience in enterprise networking, routing, and cybersecurity engineering, I have fully developed and tested a working Minimum Viable Product (MVP) of X ColdShield.
+
+What the solution does:
+1. Physics-Aware DPI: Instead of traditional IT firewalls, X ColdShield intercepts Modbus/BACnet traffic at the network edge and enforces strict physical safety limits (stopping temperature spikes above -15°C and cascade defrost sabotage).
+2. Zero-Trust Contractor Access: Directly addresses the primary vulnerability vector by securing remote third-party maintenance.
+3. Working MVP & Dashboard: Already built in a virtualized Python/Linux lab environment, featuring real-time telemetry and a complete NIS 2 compliance audit trail.
+
+Why France?
+We plan to establish our operations in France, leveraging proximity to major European retail hubs to run pilot programs, protect critical infrastructure, and contribute to local digital sovereignty under the Passeport Talent – Projet Innovant framework.
+
+I would love the opportunity to share a quick live demo of the MVP, our architecture documentation, and our pitch deck with your team.
+
+Thank you for your time and consideration.
+
+Best regards,
+
+Ramon Reis
+Founder & Technical Director, X ColdShield
+São Paulo / Paris

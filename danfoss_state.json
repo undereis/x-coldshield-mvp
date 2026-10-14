@@ -1,0 +1,17 @@
+{
+  "last_update": "14:34:23",
+  "freezers": {
+    "Aisle 1 (Meat & Poultry)": {
+      "temp": -22,
+      "defrost": false
+    },
+    "Aisle 2 (Frozen Foods)": {
+      "temp": -20,
+      "defrost": false
+    },
+    "Aisle 3 (Dairy & Logistics)": {
+      "temp": -18,
+      "defrost": false
+    }
+  }
+}

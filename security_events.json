@@ -1,0 +1,98 @@
+[
+  {
+    "timestamp": "2026-10-14 14:34:23",
+    "status": "ALLOWED",
+    "type": "AUTHORIZED_COMMAND",
+    "register": "REG-0",
+    "Attempted_Value": -22,
+    "details": "Validated write on REG-0 (Value: -22)"
+  },
+  {
+    "timestamp": "2026-10-14 14:27:18",
+    "status": "ALLOWED",
+    "type": "AUTHORIZED_COMMAND",
+    "register": "REG-0",
+    "Attempted_Value": -22,
+    "details": "Validated write on REG-0 (Value: -22)"
+  },
+  {
+    "timestamp": "2026-10-14 14:27:16",
+    "status": "BLOCKED",
+    "type": "MASS_DEFROST_SABOTAGE",
+    "register": "REG-11",
+    "Attempted_Value": 1,
+    "details": "Simultaneous defrost cascade blocked on Aisle 2. Thermal overload prevention triggered."
+  },
+  {
+    "timestamp": "2026-10-14 14:27:16",
+    "status": "ALLOWED",
+    "type": "AUTHORIZED_COMMAND",
+    "register": "REG-10",
+    "Attempted_Value": 1,
+    "details": "Validated write on REG-10 (Value: 1)"
+  },
+  {
+    "timestamp": "2026-10-14 11:22:47",
+    "status": "BLOCKED",
+    "type": "MASS_DEFROST_SABOTAGE",
+    "register": "REG-11",
+    "Attempted_Value": 1,
+    "details": "Simultaneous defrost cascade blocked on Aisle 2. Thermal overload prevention triggered."
+  },
+  {
+    "timestamp": "2026-10-14 11:22:47",
+    "status": "BLOCKED",
+    "type": "MASS_DEFROST_SABOTAGE",
+    "register": "REG-10",
+    "Attempted_Value": 1,
+    "details": "Simultaneous defrost cascade blocked on Aisle 1. Thermal overload prevention triggered."
+  },
+  {
+    "timestamp": "2026-10-14 11:22:43",
+    "status": "BLOCKED",
+    "type": "THERMAL_SAFETY_VIOLATION",
+    "register": "REG-0",
+    "Attempted_Value": 50,
+    "details": "Physics-Aware DPI blocked dangerous setpoint (+50\u00b0C) on Aisle 1. Hard limit is -15\u00b0C."
+  },
+  {
+    "timestamp": "2026-10-14 11:22:38",
+    "status": "ALLOWED",
+    "type": "AUTHORIZED_COMMAND",
+    "register": "REG-0",
+    "Attempted_Value": -22,
+    "details": "Validated write on REG-0 (Value: -22)"
+  },
+  {
+    "timestamp": "2026-10-14 11:22:35",
+    "status": "ALLOWED",
+    "type": "AUTHORIZED_COMMAND",
+    "register": "REG-0",
+    "Attempted_Value": -22,
+    "details": "Validated write on REG-0 (Value: -22)"
+  },
+  {
+    "timestamp": "2026-10-14 11:22:30",
+    "status": "BLOCKED",
+    "type": "MASS_DEFROST_SABOTAGE",
+    "register": "REG-11",
+    "Attempted_Value": 1,
+    "details": "Simultaneous defrost cascade blocked on Aisle 2. Thermal overload prevention triggered."
+  },
+  {
+    "timestamp": "2026-10-14 11:22:30",
+    "status": "ALLOWED",
+    "type": "AUTHORIZED_COMMAND",
+    "register": "REG-10",
+    "Attempted_Value": 1,
+    "details": "Validated write on REG-10 (Value: 1)"
+  },
+  {
+    "timestamp": "2026-10-14 11:22:28",
+    "status": "ALLOWED",
+    "type": "AUTHORIZED_COMMAND",
+    "register": "REG-0",
+    "Attempted_Value": -22,
+    "details": "Validated write on REG-0 (Value: -22)"
+  }
+]
