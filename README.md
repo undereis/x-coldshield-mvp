@@ -1,5 +1,10 @@
 # X ColdShield 🛡️
 ### Physics-Aware OT Security Gateway for Legacy Supermarket Refrigeration
+<img width="1440" height="900" alt="Captura de Tela 2026-10-14 às 11 22 46" src="https://github.com/user-attachments/assets/1ff6c233-2f87-488a-92a2-38240712b9f0" />
+<img width="1440" height="900" alt="Captura de Tela 2026-10-14 às 11 22 51" src="https://github.com/user-attachments/assets/7d527127-15ae-4301-acd1-3dbf85e4dc72" />
+
+
+
 
 **X ColdShield** is an edge security gateway designed to protect legacy supermarket refrigeration and cold chain infrastructure (such as Danfoss and Carel controllers) against advanced remote attacks and thermal sabotage (aligned with the **EU NIS 2 Directive**).
 
