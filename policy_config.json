@@ -1,1 +1,10 @@
-{"maintenance_window_open": true, "max_temp": -15}
+{
+  "version": 2,
+  "min_temp": -40,
+  "max_temp": -15,
+  "maintenance": {
+    "enabled": false,
+    "starts_at": null,
+    "expires_at": null
+  }
+}

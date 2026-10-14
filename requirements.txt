@@ -1,0 +1,2 @@
+# Dashboard only; core gateway, simulator and unittest use the Python standard library.
+streamlit==1.65.0
