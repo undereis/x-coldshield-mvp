@@ -56,7 +56,7 @@ The sandbox initially denied loopback socket binding, so integration tests were 
 
 ## Continuous integration
 
-`.github/workflows/tests.yml` runs the complete suite on Ubuntu with Python 3.11 and 3.14, installing hash-pinned dependencies. It triggers on development-branch pushes, pull requests and manual dispatch. Remote publication was rejected because the connected OAuth credential lacks the `workflow` scope. No GitHub Actions run was performed. See `DELIVERY_REPORT.md` for the unblock procedure; workflow configuration alone is not evidence of a successful run.
+`.github/workflows/tests.yml` runs the complete suite on Ubuntu with Python 3.11 and 3.14, installing hash-pinned dependencies. It triggers on development-branch pushes, pull requests and manual dispatch. After the account holder authorized the missing `workflow` scope, the branch was published. [GitHub Actions run 38653980180](https://github.com/undereis/x-coldshield-mvp/actions/runs/38653980180) completed successfully on Ubuntu/Python 3.11 and 3.14 at revision `42e33e0c167ef1aee9e46c26d212daec0aecc3c2`. Both job logs show `Ran 90 tests` followed by `OK`; their installation and test steps succeeded. [Machine-readable CI evidence](docs/ci-results.json) records job links, completion timestamps and measured suite durations. A later documentation-only update records this result without changing tested application code.
 
 ## What the evidence does not establish
 

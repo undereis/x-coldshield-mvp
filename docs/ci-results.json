@@ -1,0 +1,32 @@
+{
+  "run_id": 38653980180,
+  "url": "https://github.com/undereis/x-coldshield-mvp/actions/runs/38653980180",
+  "revision": "42e33e0c167ef1aee9e46c26d212daec0aecc3c2",
+  "status": "completed",
+  "conclusion": "success",
+  "environment": "GitHub Actions Ubuntu",
+  "jobs": [
+    {
+      "name": "test (3.11)",
+      "url": "https://github.com/undereis/x-coldshield-mvp/actions/runs/38653980180/job/116159234546",
+      "conclusion": "success",
+      "completed_at": "2026-10-14T23:25:55Z",
+      "tests_run": 90,
+      "failures": 0,
+      "errors": 0,
+      "elapsed_seconds": 3.766,
+      "test_step": "success"
+    },
+    {
+      "name": "test (3.14)",
+      "url": "https://github.com/undereis/x-coldshield-mvp/actions/runs/38653980180/job/116159280343",
+      "conclusion": "success",
+      "completed_at": "2026-10-14T23:26:11Z",
+      "tests_run": 90,
+      "failures": 0,
+      "errors": 0,
+      "elapsed_seconds": 4.186,
+      "test_step": "success"
+    }
+  ]
+}

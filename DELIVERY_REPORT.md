@@ -30,7 +30,7 @@ Criados:
 - `tests/test_protocol.py`, `test_config.py`, `test_gateway_review.py`, `test_integration.py`, `test_dashboard.py` e `test_transport_faults.py`.
 - `scripts/verify.py`, `requirements.txt`, `requirements.lock` e `.github/workflows/tests.yml`.
 - `AUDIT_REPORT.md`, `ARCHITECTURE.md`, `SECURITY.md`, `TEST_REPORT.md`, `ROADMAP.md` e este relatório.
-- `docs/DEMO.md`, `INCUBATOR_BRIEF_EN.md`, `INCUBATOR_BRIEF_FR.md` e quatro arquivos de resultados em JSON/texto para Python 3.11/3.14.
+- `docs/DEMO.md`, `INCUBATOR_BRIEF_EN.md`, `INCUBATOR_BRIEF_FR.md` e quatro arquivos de resultados locais em JSON/texto para Python 3.11/3.14, além de `docs/ci-results.json` com a verificação remota.
 
 Nenhum arquivo original rastreado foi excluído. Artefatos locais pessoais previamente ignorados não foram incluídos.
 
@@ -44,18 +44,11 @@ Nenhum arquivo original rastreado foi excluído. Artefatos locais pessoais previ
 
 Branch de trabalho: `develop/mvp-v0.2`. O commit original da `master` permanece `ed5cfc68eb9e770626d8510d748f1dd41590d447`. Nenhum merge foi realizado.
 
-Commits organizados: diagnóstico original (`0c43bb5`), implementação/testes (`0343702`) e documentação/evidências. Os novos commits usam identidade técnica genérica para não adicionar email/hostname pessoal.
+Commits organizados: diagnóstico original (`0c43bb5`), implementação/testes (`0343702`) documentação/evidências e registro da publicação/CI. Os novos commits usam identidade técnica genérica para não adicionar email/hostname pessoal.
 
-A publicação foi tentada, mas o GitHub recusou `git push -u origin develop/mvp-v0.2`: a credencial OAuth conectada não possui o escopo `workflow`, exigido para adicionar `.github/workflows/tests.yml`. A branch e todos os commits estão salvos **localmente**. A CI está configurada, mas não foi executada no GitHub. A master remota foi verificada no commit original antes da tentativa e não foi enviada nem modificada.
+A credencial OAuth foi atualizada pelo titular da conta com o escopo `workflow`. A branch `develop/mvp-v0.2` foi publicada no GitHub com sucesso, preservando a master remota em `ed5cfc68eb9e770626d8510d748f1dd41590d447`. Nenhum token foi incluído no repositório.
 
-Para publicar mantendo a CI, o responsável deve concluir a autenticação do GitHub CLI com o escopo adicional e depois enviar a branch:
-
-```sh
-gh auth refresh -h github.com -s workflow
-git push -u origin develop/mvp-v0.2
-```
-
-A renovação da autenticação exige interação do titular da conta. Nenhum token foi adicionado ao código ou aos arquivos de configuração. O bloqueio de permissão não altera os resultados locais dos testes.
+A CI remota **passou nos dois jobs Ubuntu/Python 3.11 e 3.14**, com 90 testes executados em cada um. Execução: [GitHub Actions](https://github.com/undereis/x-coldshield-mvp/actions/runs/38653980180), revisão `42e33e0c167ef1aee9e46c26d212daec0aecc3c2`. Os logs confirmam `Ran 90 tests` e `OK` nos dois ambientes. [Resumo verificável](docs/ci-results.json). A atualização posterior contém somente documentação e essa evidência.
 
 ## Pendências e prontidão para incubação
 
