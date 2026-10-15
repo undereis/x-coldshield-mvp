@@ -99,6 +99,7 @@ The tracked `danfoss_state.json` and `security_events.json` files are historical
 
 ## Evaluation materials
 
+- [Technical dossier and business plan — France 2026 (PDF)](docs/X_ColdShield_Technical_Dossier_MVP_0_2_1_France_2026.pdf) — supplied dossier for MVP 0.2.1, referencing validated commit `85d0c8ba2d9393ce923efb4a24cc582148df7e45`.
 - [Delivery report](DELIVERY_REPORT.md)
 - [Architecture](ARCHITECTURE.md) and [security model](SECURITY.md)
 - [Original audit](AUDIT_REPORT.md), [test evidence](TEST_REPORT.md) and [roadmap](ROADMAP.md)
