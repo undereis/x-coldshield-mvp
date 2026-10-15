@@ -6,6 +6,18 @@ This guide demonstrates command policy using a software simulator. It does not e
 
 Run from the repository root so processes share policy/runtime paths. Follow [README.md](../README.md) installation instructions. Do not reuse a gateway or simulator from another exercise.
 
+## Automated 0.2.1 presentation
+
+```sh
+python scripts/demo.py --output-dir runtime/eura-demo-01
+```
+
+This creates a private closed policy and runtime, starts the two real entrypoints on reserved loopback ports, verifies 11 protocol transactions and two administrative operations, and returns a nonzero exit code for any unexpected result or forced cleanup. The sequence checks unchanged state after denials, -22°C acknowledgment, +50°C refusal, defrost 10 accepted/11 refused, and unknown function/register rejection. It closes the private policy and requests orderly shutdown even after a failed step. It leaves other existing laboratory processes/policies untouched.
+
+Retain `report.md`, `report.json`, `audit-export.json`, `manifest.json`, child logs and final snapshot/policy. Verify hashes before sharing. Choose a fresh directory on repetition; no existing evidence is overwritten. Releasing a reserved port before child binding has a small local race: another process taking the port makes startup fail visibly rather than silently changing topology.
+
+For the presentation, run the verifier in a fresh output directory, show its revision/inventory/result, run the demo, and use its table to explain intent versus validated acknowledgment versus unknown delivery. Explain the scope and remaining limitations before discussing future pilot work. The dashboard is optional; the automated evidence does not depend on manual UI interaction.
+
 ## Start
 
 In separate terminals:

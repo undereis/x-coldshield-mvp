@@ -1,4 +1,4 @@
-# X ColdShield — MVP 0.2
+# X ColdShield — MVP 0.2.1
 
 X ColdShield is a **local laboratory prototype** of a refrigeration command-policy gateway. It evaluates a deliberately small Modbus TCP register map against maintenance, setpoint and defrost constraints, then forwards permitted requests to a software simulator.
 
@@ -24,6 +24,17 @@ python3 -m venv .venv
 source .venv/bin/activate
 python -m pip install --require-hashes -r requirements.lock
 ```
+
+## Automated evaluation
+
+```sh
+python scripts/demo.py --output-dir runtime/demo-evaluation
+python scripts/verify.py --output-dir runtime/verification-evaluation
+```
+
+Choose a new output directory for each run. The demo starts actual simulator and gateway subprocesses on reserved local ports, asserts each result and observed register state, closes maintenance, stops both children and exports correlated audit evidence. Its JSON, Markdown report and SHA-256 manifest support a repeatable technical presentation. See [the 0.2.1 comparison report](MVP_0_2_1_REPORT.md).
+
+Sessions allow at most eight concurrent clients per service, 30 seconds and 64 frame attempts. Excess connections close; reconnects remain possible. Critical audit records have a 4096-event/8 MiB database budget, with limited repeated denial summaries. Capacity exhaustion refuses further authorized operations before upstream contact.
 
 ## Local demonstration
 
@@ -65,7 +76,7 @@ See [the demo guide](docs/DEMO.md) for expected outcomes, failure interpretation
 ## Verification
 
 ```sh
-python -m unittest discover -s tests -v
+python scripts/verify.py --output-dir runtime/verification-manual
 ```
 
 Environment, commands and observed results belong in [TEST_REPORT.md](TEST_REPORT.md). Tests demonstrate only exercised laboratory behavior; they do not certify a product or prove safety on real equipment.
@@ -93,4 +104,4 @@ The tracked `danfoss_state.json` and `security_events.json` files are historical
 - [Original audit](AUDIT_REPORT.md), [test evidence](TEST_REPORT.md) and [roadmap](ROADMAP.md)
 - [English incubation brief](docs/INCUBATOR_BRIEF_EN.md) and [French incubation brief](docs/INCUBATOR_BRIEF_FR.md)
 
-The development branch is `develop/mvp-v0.2`. Changes require review before merging into the main branch.
+The development branch is `codex/mvp-v0.2.1`. The audited baseline `develop/mvp-v0.2` and `master` are preserved; no merge is part of this release.

@@ -2,7 +2,7 @@
 
 ## Intended use
 
-X ColdShield 0.2 is a loopback-only laboratory prototype. Current tests use software clients and a software simulator. Do not connect the demonstration to industrial equipment or expose its services to another host.
+X ColdShield 0.2.1 is a loopback-only laboratory prototype. Current tests use software clients and a software simulator. Do not connect the demonstration to industrial equipment or expose its services to another host.
 
 The register map and temperature limits illustrate policy enforcement. They are not validated refrigeration safety limits, a controller safety function or evidence of food-safety protection. No NIS 2 certification, compliance determination, BACnet support or industrial compatibility is claimed.
 
@@ -18,7 +18,7 @@ The register map and temperature limits illustrate policy enforcement. They are 
 | Upstream connection | Timeout, malformed reply, unavailable simulator | Bounded exchanges, validated replies, uncertainty records | Write may apply before acknowledgment is lost |
 | Event records | Lost intent or accidental truncation | SQLite transactions, synchronous durability requested, intent before send | No tamper resistance or remote retention |
 | Simulator access | Gateway bypass | Loopback scope, explicit demo bypass control | Local processes can bypass via port 5020 |
-| Availability | Slow clients or connection exhaustion | Deadlines and bounded clients | Denial of service and sustained operation unvalidated |
+| Availability | Slow clients or connection exhaustion | Eight clients, finite session age/frame count, bounded queue waits | Reconnect flooding, unfair scheduling and sustained operation remain unvalidated |
 
 The trusted computing base includes Python, the OS, local administrator, clock, filesystem, policy and simulator. A compromised local administrator is outside the enforcement boundary. Modbus messages do not authenticate a contractor; the MVP adds no TLS or cryptographic client identity.
 
@@ -38,9 +38,9 @@ Opening maintenance with `python -m coldshield.maintenance open --seconds 300` a
 
 ## Storage and traceability
 
-SQLite records correlate decisions/outcomes using request identifiers and a policy digest. The digest identifies canonical configuration content; it does not authenticate the author. Host administrators can alter/delete records. No immutable, independently verified or certified audit trail is provided. Disk/storage failures prevent new forwarding when detected before send; post-send failures remain uncertain.
+SQLite records correlate decisions/outcomes using request identifiers and a policy digest. The digest identifies canonical configuration content; it does not authenticate the author. Host administrators can alter/delete records. No immutable, independently verified or certified audit trail is provided. Disk/storage failures prevent new forwarding when detected before send; post-send failures remain uncertain. Storage capacity can intentionally stop authorized traffic. An exception 4 from the simulator can follow a visible but not durably confirmed write; classify it as unknown rather than proof of no effect. Maintenance recovery requires an explicit successful close. POSIX fsync/flock behavior assumes a functioning local filesystem; simultaneous failures that prevent both quarantine recovery and removal cannot provide a persistent fail-closed guarantee. The services must then be stopped by the operator.
 
-Keep runtime evidence, policy, code revision and test environment together when reviewing an exercise. External integrity protection, access controls, retention and export are future work.
+Keep runtime evidence, policy, code revision and test environment together when reviewing an exercise. The bounded laboratory retention/aggregation and coherent export policy is described in [ARCHITECTURE.md](ARCHITECTURE.md). External integrity protection, authenticated access and operational archival recovery remain future work.
 
 ## Vulnerability reporting
 

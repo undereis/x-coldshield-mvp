@@ -3,6 +3,9 @@ from dataclasses import dataclass
 import socket
 import struct
 import time
+import math
+
+from .limits import FRAME_TIMEOUT, UPSTREAM_TIMEOUT, validate_port, validate_positive_number
 
 THERMAL_REGISTERS = frozenset((0, 1, 2))
 DEFROST_REGISTERS = frozenset((10, 11, 12))
@@ -31,21 +34,35 @@ class Frame:
         return struct.pack(">HHHB", self.transaction_id, 0, len(self.pdu) + 1, self.unit_id) + self.pdu
 
 
-def read_frame(sock, timeout=3.0):
+def _deadline(timeout, deadline):
+    validate_positive_number(timeout, "timeout")
+    if deadline is not None and (type(deadline) not in (int, float) or not math.isfinite(deadline)):
+        raise ValueError("deadline must be a finite monotonic time")
+    local = time.monotonic() + timeout
+    return local if deadline is None else min(local, deadline)
+
+
+def _remaining(deadline):
+    remaining = deadline - time.monotonic()
+    if remaining <= 0:
+        raise ProtocolError("Transport deadline exceeded")
+    return remaining
+
+
+def read_frame(sock, timeout=FRAME_TIMEOUT, *, deadline=None):
     """Read exactly one ADU without consuming the next; one deadline per ADU."""
-    deadline = time.monotonic() + timeout
+    deadline = _deadline(timeout, deadline)
 
     def exact(size, clean_eof=False):
         buf = bytearray()
         while len(buf) < size:
-            remaining = deadline - time.monotonic()
-            if remaining <= 0:
-                raise ProtocolError("Frame deadline exceeded")
+            remaining = _remaining(deadline)
             sock.settimeout(remaining)
             try:
                 part = sock.recv(size - len(buf))
             except socket.timeout as exc:
                 raise ProtocolError("Frame deadline exceeded") from exc
+            _remaining(deadline)
             if not part:
                 if clean_eof and not buf:
                     return None
@@ -109,11 +126,16 @@ def validate_response(request, response):
     return response
 
 
-def exchange(port, request, timeout=3.0, before_send=None):
+def exchange(port, request, timeout=UPSTREAM_TIMEOUT, before_send=None, *, deadline=None):
     """Always loopback. No retries: a failed reply may hide a completed write."""
-    with socket.create_connection(("127.0.0.1", port), timeout=timeout) as sock:
-        sock.settimeout(timeout)
+    validate_port(port)
+    deadline = _deadline(timeout, deadline)
+    with socket.create_connection(("127.0.0.1", port), timeout=_remaining(deadline)) as sock:
+        sock.settimeout(_remaining(deadline))
         if before_send is not None:
             before_send()
-        sock.sendall(request.encode())
-        return validate_response(request, read_frame(sock, timeout))
+        packet = request.encode()
+        sock.settimeout(_remaining(deadline))
+        sock.sendall(packet)
+        _remaining(deadline)
+        return validate_response(request, read_frame(sock, timeout, deadline=deadline))

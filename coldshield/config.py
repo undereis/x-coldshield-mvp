@@ -1,6 +1,7 @@
 """Strict policy parsing. Filesystem access is the laboratory trust boundary."""
 from dataclasses import dataclass
 from datetime import datetime, timezone
+import fcntl
 import hashlib
 import json
 from pathlib import Path
@@ -28,7 +29,10 @@ def parse_time(value):
         raise ConfigError("Invalid maintenance timestamp") from exc
     if stamp.tzinfo is None or stamp.utcoffset() is None:
         raise ConfigError("Maintenance timestamps must include a timezone")
-    return stamp.astimezone(timezone.utc)
+    try:
+        return stamp.astimezone(timezone.utc)
+    except (OverflowError, ValueError) as exc:
+        raise ConfigError("Maintenance timestamp is outside supported range") from exc
 
 
 @dataclass(frozen=True)
@@ -70,7 +74,12 @@ def validate_policy(data):
                   hashlib.sha256(canonical.encode()).hexdigest())
 
 
-def load_policy(path):
+def uncertainty_path(path):
+    return Path(str(path) + ".uncertain")
+
+
+def read_policy_data(path):
+    """Strict single read, also used inside the administrative exclusive lock."""
     def unique(pairs):
         result = {}
         for key, value in pairs:
@@ -79,9 +88,37 @@ def load_policy(path):
             result[key] = value
         return result
     try:
-        path = Path(path)
-        if path.stat().st_size > 16384:
+        with Path(path).open("r", encoding="utf-8") as file:
+            contents = file.read(16385)
+        if len(contents.encode("utf-8")) > 16384:
             raise ConfigError("Policy exceeds 16 KiB")
-        return validate_policy(json.loads(path.read_text(), object_pairs_hook=unique))
-    except (OSError, ValueError, TypeError, RecursionError) as exc:
+        data = json.loads(contents, object_pairs_hook=unique)
+        validate_policy(data)
+        return data
+    except (OSError, ValueError, TypeError, RecursionError, OverflowError) as exc:
         raise ConfigError(f"Policy unavailable or invalid: {exc}") from exc
+
+
+def load_policy(path):
+    path = Path(path)
+    lease = None
+    try:
+        # Refuse during administrative publication, including marker removal.
+        lock_path = Path(str(path) + ".lock")
+        try:
+            lease = lock_path.open("r")
+        except FileNotFoundError:
+            pass
+        if lease is not None:
+            fcntl.flock(lease, fcntl.LOCK_SH | fcntl.LOCK_NB)
+        if uncertainty_path(path).exists():
+            raise ConfigError("Policy publication uncertain; explicit maintenance close required")
+        data = read_policy_data(path)
+        if uncertainty_path(path).exists():
+            raise ConfigError("Policy publication uncertain; explicit maintenance close required")
+        return validate_policy(data)
+    except (OSError, OverflowError) as exc:
+        raise ConfigError(f"Policy unavailable or invalid: {exc}") from exc
+    finally:
+        if lease is not None:
+            lease.close()

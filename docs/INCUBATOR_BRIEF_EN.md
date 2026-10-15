@@ -1,6 +1,6 @@
 # X ColdShield — incubation brief
 
-**Stage:** MVP 0.2, local laboratory prototype. **Project owner:** repository maintainer. **Purpose:** technical evaluation and customer discovery; this document is not evidence of industrial deployment.
+**Stage:** MVP 0.2.1, local laboratory prototype. **Project owner:** repository maintainer. **Purpose:** technical evaluation and customer discovery; this document is not evidence of industrial deployment.
 
 ## Problem and customer hypothesis
 
@@ -40,3 +40,7 @@ No partnership or pilot is currently established by this work. A proposed sequen
 EuraTechnologies is a potential incubation target because its official site lists cybersecurity and industry among its focus areas. This is a fit hypothesis, not an affiliation or endorsement. See [EuraTechnologies](https://www.euratechnologies.com/en) (checked 14 October 2026). Current program requirements and application availability must be confirmed separately before submission.
 
 The requested support would be technical challenge, customer discovery, introductions and help defining a credible commercialization plan. The immediate evaluation question is whether the laboratory evidence and the proposed validation program justify further investigation.
+
+## Reproducible technical session
+
+Run `python scripts/verify.py --output-dir runtime/evaluation-tests` and `python scripts/demo.py --output-dir runtime/evaluation-demo` in a clean checkout. The 0.2.1 demo asserts local decisions and observed state, exports correlated events and stops both services. Session/storage budgets and publication uncertainty are explicit. See [the release comparison](../MVP_0_2_1_REPORT.md). This supports an initial laboratory evaluation, not deployment acceptance.

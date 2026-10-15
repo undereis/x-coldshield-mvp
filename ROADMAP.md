@@ -1,28 +1,16 @@
-# X ColdShield roadmap
+# Evolution after MVP 0.2.1
 
-This roadmap describes proposed work, not delivered features or commercial commitments. Version 0.2 is a local laboratory prototype. Every stage requires an explicit evidence review before the next stage begins.
+Version 0.2.1 adds bounded sessions and audit storage, conservative publication recovery, serialized local administration, topology checks and measured evaluation artifacts. It remains an isolated prototype. Historical v0.2 test evidence stays available; [MVP_0_2_1_REPORT.md](MVP_0_2_1_REPORT.md) compares the two versions.
 
-| Stage | Objective | Evidence required to proceed |
-| --- | --- | --- |
-| 0.2 — reproducible laboratory | Strict Modbus TCP framing, bounded local maintenance, explicit register policy, durable local decision records and simulator demonstration | Reproducible automated tests, recorded failure cases, architecture and limitations, dependency installation and demo instructions |
-| 0.3 — stronger laboratory validation | Extend negative testing, fuzz the protocol parser, measure load and latency, exercise power-loss recovery and independent review | Published test method and raw results; no loss of policy enforcement under tested faults; documented resource limits |
-| 0.4 — partner preparation | Define a controller-specific register map, threat model, physical operating envelope and deployment requirements with a consenting partner | Reviewed requirements; vendor documentation; reproducible controller emulation; acceptance criteria and rollback plan |
-| Controlled partner pilot | Evaluate a reviewed configuration in an isolated partner test environment under a separate authorization | Safety review, site-specific authorization, accountable operators, recovery procedures and measured outcomes |
-| Product engineering | Build supported operations, authenticated administration, key management, remote log export, lifecycle support and a commercial offering | Independent security assessment, documented compatibility matrix, operational support plan, legal review and validated customer demand |
+## Version 0.3 evidence gates
 
-## Next technical priorities
+1. Separate authenticated administrative identity/roles from a host-wide maintenance window, with revocation and an explicit threat model. Preserve closed defaults.
+2. Design controlled archive/restore and reconciliation for pending intents/reservations, full audit capacity and uncertain simulator state. Test interrupted writes and real process crashes; avoid treating injected errors as power-loss proof.
+3. Introduce reproducible parser fuzzing/property tests and long-running reconnect/load experiments, measuring fairness, shutdown latency, queue behavior and storage growth. Define limits before claiming performance.
+4. Test monotonic deadlines alongside UTC clock changes and scheduled maintenance, including storage stalls that socket timeouts cannot preempt.
+5. Obtain refrigeration/OT specialist review of synthetic rules. Document vendor-specific maps only from authoritative documentation and authorized isolated test benches; qualify every interoperability claim.
+6. Prepare packaging, supported operating systems, upgrade/rollback and dependency/security maintenance procedures.
 
-1. Test fragmented and malformed traffic more extensively, including fuzzing and long-lived connection load. Establish reproducible performance measurements before quoting latency or throughput.
-2. Review failure modes with an OT refrigeration engineer. Rejecting a write can have operational consequences; software policy does not replace controller protection or a safety assessment.
-3. Replace laboratory register assumptions with an explicitly versioned mapping for each proposed controller. Evaluate scaling, units, device exceptions and allowed functions from authoritative documentation.
-4. Design administrator authentication and authorization, signed configuration distribution, credential handling and audit export with independently protected retention.
-5. Investigate restart and power-loss behavior, clock trust, policy reload behavior and ambiguous downstream write outcomes. Define recovery ownership and reconciliation procedures.
-6. Establish packaging, dependency review, vulnerability response and upgrade/rollback support before promising deployment support.
+## Incubation and customer discovery
 
-## Business validation priorities
-
-The initial customer hypotheses are refrigeration integrators, cold-chain operators and food retailers that need better control over remote write commands. These hypotheses are unvalidated. No market size, customer contract, revenue, loss-prevention result or willingness to pay is asserted.
-
-Proposed discovery interviews should establish the actual maintenance workflow, existing network controls, installation constraints, procurement ownership and acceptance criteria. Compare the proposed gateway against controller configuration, network segmentation and existing security products using measured customer requirements.
-
-Incubation could support customer discovery, specialist introductions and product planning. No incubator admission, partner relationship or industrial pilot has been obtained by this repository work. Outreach and any use of real equipment require separate authorization.
+Use the local evidence to invite technical challenge and interviews with refrigeration integrators, OT specialists and cold-chain operators. Establish maintenance workflows, existing controls, procurement ownership and measurable acceptance criteria. No market traction, loss-prevention metric or industrial readiness follows from simulator results. EuraTechnologies evaluation is the immediate target; outreach, application submission and real-equipment trials require separate authorization.

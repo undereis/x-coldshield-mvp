@@ -11,6 +11,8 @@ from .config import ConfigError, load_policy
 from .protocol import (DEFROST_REGISTERS, REGISTERS, THERMAL_REGISTERS, ProtocolError,
                        decode_read, decode_write, exchange, exception_response,
                        read_frame, read_request)
+from .limits import (FRAME_TIMEOUT, UPSTREAM_TIMEOUT, REQUEST_BUDGET, RESPONSE_RESERVE,
+                     validate_port, validate_positive_number)
 from .server import LabServer
 from .storage import AuditError, AuditStore
 
@@ -18,26 +20,42 @@ LOG = logging.getLogger(__name__)
 
 
 class Gateway:
-    def __init__(self, policy_path, audit, upstream_port=5020, timeout=3.0):
+    def __init__(self, policy_path, audit, upstream_port=5020, timeout=UPSTREAM_TIMEOUT):
         self.policy_path = Path(policy_path)
         self.audit = audit
         self.upstream_port = upstream_port
-        self.timeout = timeout
+        self.timeout = validate_positive_number(timeout, "timeout")
         # Serialize authorization, state checks, reservations and delivery across clients.
         self.lock = threading.Lock()
 
-    def process(self, frame, peer="local"):
+    def process(self, frame, peer="local", *, deadline=None, cancelled=None):
         request_id = str(uuid.uuid4())
         fields = {"peer": peer, "transaction_id": frame.transaction_id,
                   "unit_id": frame.unit_id, "function": frame.function}
-        with self.lock:
+        deadline = deadline if deadline is not None else time.monotonic() + REQUEST_BUDGET
+        work_deadline = deadline - RESPONSE_RESERVE
+        cancelled = cancelled or (lambda: False)
+        acquired = self.lock.acquire(timeout=max(0, work_deadline - time.monotonic()))
+        try:
+            if not acquired or cancelled() or time.monotonic() >= work_deadline:
+                self.audit.record(request_id, "decision", "BLOCKED", "REQUEST_BUDGET_EXCEEDED", **fields)
+                return exception_response(frame, 6)
+            return self._process(frame, request_id, fields, work_deadline, cancelled)
+        except AuditError:
+            LOG.exception("Audit unavailable; request refused or delivery outcome uncertain: %s", request_id)
+            return exception_response(frame, 4)
+        finally:
             try:
-                return self._process(frame, request_id, fields)
+                self.audit.release_events(request_id)
             except AuditError:
-                LOG.exception("Audit unavailable; request refused or delivery outcome uncertain: %s", request_id)
-                return exception_response(frame, 4)
+                LOG.exception("Unable to release audit capacity: %s", request_id)
+            if acquired:
+                self.lock.release()
 
-    def _process(self, frame, request_id, fields):
+    def _process(self, frame, request_id, fields, deadline, cancelled):
+        def check_budget():
+            if cancelled() or time.monotonic() >= deadline:
+                raise TimeoutError("Request budget exhausted or server stopping")
         def deny(reason, code=3):
             self.audit.record(request_id, "decision", "BLOCKED", reason, **fields)
             return exception_response(frame, code)
@@ -73,6 +91,9 @@ class Gateway:
             if address in DEFROST_REGISTERS and value not in (0, 1):
                 return deny("INVALID_DEFROST_VALUE")
         # Persist authorization intent before contacting upstream, including state reads.
+        if cancelled() or time.monotonic() >= deadline:
+            return deny("REQUEST_BUDGET_EXCEEDED", 6)
+        self.audit.reserve_events(request_id, 2)
         self.audit.record(request_id, "decision", "AUTHORIZED", "POLICY_ACCEPTED", **fields)
         def current_write_policy():
             try:
@@ -85,11 +106,15 @@ class Gateway:
             self.audit.record(request_id, "outcome", "BLOCKED", "POLICY_CHANGED_OR_EXPIRED", **fields)
             return exception_response(frame, 3)
 
+        if cancelled() or time.monotonic() >= deadline:
+            self.audit.record(request_id, "outcome", "BLOCKED", "REQUEST_BUDGET_EXCEEDED", **fields)
+            return exception_response(frame, 6)
         if frame.function == 6 and not current_write_policy():
             return changed_policy()
         if frame.function == 6 and address in DEFROST_REGISTERS and value == 1:
             try:
-                state = exchange(self.upstream_port, read_request(10, 3, frame.transaction_id), self.timeout)
+                state = exchange(self.upstream_port, read_request(10, 3, frame.transaction_id),
+                                 self.timeout, before_send=check_budget, deadline=deadline)
                 if state.function != 3:
                     raise ProtocolError("Defrost state unavailable")
                 import struct
@@ -108,13 +133,18 @@ class Gateway:
                                   **{**fields, "details": {"error": str(exc)}})
                 return exception_response(frame, 11)
         # Recheck all writes after potentially blocking audit/state operations.
+        if cancelled() or time.monotonic() >= deadline:
+            self.audit.record(request_id, "outcome", "BLOCKED", "REQUEST_BUDGET_EXCEEDED", **fields)
+            return exception_response(frame, 6)
         if frame.function == 6 and not current_write_policy():
             return changed_policy()
         def check_before_send():
+            check_budget()
             if frame.function == 6 and not current_write_policy():
                 raise ConfigError("Policy changed or expired while connecting")
         try:
-            response = exchange(self.upstream_port, frame, self.timeout, before_send=check_before_send)
+            response = exchange(self.upstream_port, frame, self.timeout,
+                                before_send=check_before_send, deadline=deadline)
         except ConfigError:
             return changed_policy()
         except (OSError, ProtocolError) as exc:
@@ -123,7 +153,12 @@ class Gateway:
                               **{**fields, "details": {"error": str(exc), "delivery": "unknown"}})
             return exception_response(frame, 11)
         if response.function & 0x80:
-            decision, reason = "REJECTED", "UPSTREAM_EXCEPTION"
+            if response.pdu[1] in (1, 2, 3):
+                decision, reason = "REJECTED", "UPSTREAM_EXCEPTION"
+            else:
+                # A device failure can follow a visible write with uncertain durability.
+                decision, reason = "UNKNOWN", "UPSTREAM_EXCEPTION"
+                fields["details"] = {"delivery": "unknown", "exception_code": response.pdu[1]}
         else:
             decision, reason = "ACKNOWLEDGED", "VALIDATED_RESPONSE"
         self.audit.record(request_id, "outcome", decision, reason, **fields)
@@ -134,12 +169,19 @@ class GatewayHandler(socketserver.BaseRequestHandler):
     def handle(self):
         gateway = self.server.gateway
         while True:
+            deadline = self.server.next_request_deadline(self.request)
+            if deadline is None:
+                return
             try:
-                frame = read_frame(self.request, gateway.timeout)
+                frame = read_frame(self.request, min(FRAME_TIMEOUT, gateway.timeout), deadline=deadline)
                 if frame is None:
                     return
-                response = gateway.process(frame, self.client_address[0])
-                self.request.settimeout(gateway.timeout)
+                response = gateway.process(frame, self.client_address[0], deadline=deadline,
+                                           cancelled=self.server.stopping.is_set)
+                remaining = deadline - time.monotonic()
+                if remaining <= 0 or self.server.stopping.is_set():
+                    return
+                self.request.settimeout(remaining)
                 self.request.sendall(response.encode())
             except ProtocolError as exc:
                 try:
@@ -153,7 +195,13 @@ class GatewayHandler(socketserver.BaseRequestHandler):
 
 
 def make_gateway(port=5021, upstream_port=5020, policy_path="policy_config.json",
-                 runtime_dir="runtime", timeout=3.0):
+                 runtime_dir="runtime", timeout=UPSTREAM_TIMEOUT):
+    validate_port(port, allow_ephemeral=True)
+    validate_port(upstream_port)
+    validate_positive_number(timeout, "timeout")
+    if port == upstream_port:
+        raise ValueError("Gateway upstream must not target its own port")
+    load_policy(policy_path)
     runtime = Path(runtime_dir)
     runtime.mkdir(parents=True, exist_ok=True)
     lease = (runtime / "gateway.lock").open("a")
@@ -161,6 +209,9 @@ def make_gateway(port=5021, upstream_port=5020, policy_path="policy_config.json"
         fcntl.flock(lease, fcntl.LOCK_EX | fcntl.LOCK_NB)
         audit = AuditStore(runtime / "audit.sqlite3")
         server = LabServer(port, GatewayHandler)
+        if server.server_address[1] == upstream_port:
+            server.server_close()
+            raise ValueError("Gateway upstream resolves to its own bound port")
     except BaseException:
         lease.close()
         raise

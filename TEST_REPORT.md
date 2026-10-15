@@ -1,3 +1,26 @@
+# MVP 0.2.1 verification
+
+The exact suite is maintained in `tests/expected_inventory.json`; it currently contains **162 test IDs**, up from 90 in v0.2. The verifier rejects missing/extra/duplicate IDs, collection errors, skips, incomplete execution, source drift, revision/branch/status movement and dirty CI checkouts. Every run saves Git state before/after, per-file SHA-256 manifests, actual execution inventory/counts/duration, Python/platform/package versions and a transcript checksum.
+
+The current measured results and immutable revision are recorded in [MVP_0_2_1_REPORT.md](MVP_0_2_1_REPORT.md) and `docs/evidence-v0.2.1/`. GitHub Actions runs Python 3.11 and 3.14 against its exact revision and uploads evidence even on failure, with a 30-day artifact retention. Checksums detect changes relative to a retained manifest; they do not authenticate the publisher.
+
+```sh
+python scripts/verify.py --require-clean --output-dir runtime/verification-new-run
+python scripts/demo.py --output-dir runtime/demo-new-run
+```
+
+Use a new output directory each time. On local development runs, dirty worktrees are allowed only when accurately recorded and unchanged during verification; `--require-clean` enforces clean input. Dependency installation uses `python -m pip install --require-hashes -r requirements.lock`. Loopback sockets require local OS permission.
+
+The additional regressions cover finite responsive/idle sessions, quota and worker admission, controlled shutdown/ownership, end-to-end transport deadlines, audit row/byte budgets and summaries, concurrent reservations, SQLite lock failures, pre/post-publication failures, fsync failures and recovery, serialized administrative ordering, invalid topology/policy, bounded gateway queueing, audit capacity before forwarding, ambiguous post-publication write outcomes, verifier failure modes and a real subprocess demonstration. Existing parser, policy, interlock, response validation and Streamlit behavior remain covered.
+
+Injected exceptions demonstrate specified failure paths; they do not substitute for power-cut, hardware, full-load or industrial interoperability testing. A test suite passing is evidence of its enumerated assertions, not proof of absence of other defects.
+
+---
+
+## Historical v0.2 evidence (preserved)
+
+The following report and `docs/test-results-python*.json/.txt` describe v0.2 only. The old verifier's outputs are historical; reproduce v0.2 from its preserved branch. The 0.2.1 verifier writes fresh runtime output instead of overwriting them.
+
 # MVP 0.2 verification report
 
 Executed 14 October 2026. Tested implementation revision: `0343702fc221c351b598aac2fa4980cc869b3804`, branch `develop/mvp-v0.2`. Subsequent commits add documentation/evidence only. Source-tree digest (entrypoints, package, tests, verification harness, policy, dependency manifests and workflow): `f67600a01e2561e8c54b7e48ffb20f21b443ac2c410533254ecea553c59a0f18`.

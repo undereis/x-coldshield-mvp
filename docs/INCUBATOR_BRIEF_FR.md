@@ -1,6 +1,6 @@
 # X ColdShield — note de présentation pour l’incubation
 
-**Stade :** MVP 0.2, prototype de laboratoire local. **Responsable du projet :** mainteneur du dépôt. **Objectif :** évaluation technique et découverte client ; ce document ne constitue pas une preuve de déploiement industriel.
+**Stade :** MVP 0.2.1, prototype de laboratoire local. **Responsable du projet :** mainteneur du dépôt. **Objectif :** évaluation technique et découverte client ; ce document ne constitue pas une preuve de déploiement industriel.
 
 ## Problème et hypothèse client
 
@@ -40,3 +40,7 @@ Aucun partenariat ni pilote n’est établi par les travaux de ce dépôt. La d�
 EuraTechnologies représente une cible d’incubation possible : son site officiel mentionne la cybersécurité et l’industrie parmi ses domaines d’activité. Il s’agit d’une hypothèse d’adéquation, pas d’une affiliation ni d’un soutien acquis. Voir [EuraTechnologies](https://www.euratechnologies.com/en), consulté le 14 octobre 2026. Les conditions et l’ouverture des candidatures doivent être vérifiées séparément avant tout dépôt.
 
 L’accompagnement recherché porterait sur la confrontation technique, la découverte client, les mises en relation et la définition d’un plan de commercialisation crédible. La question immédiate est de déterminer si les preuves de laboratoire et le programme de validation proposé justifient de poursuivre l’étude.
+
+## Séance technique reproductible
+
+Exécuter `python scripts/verify.py --output-dir runtime/evaluation-tests`, puis `python scripts/demo.py --output-dir runtime/evaluation-demo`, depuis un dépôt propre. La démonstration 0.2.1 vérifie les décisions locales et les états observés, exporte les événements corrélés et arrête les deux services. Les budgets de session et de stockage ainsi que les résultats incertains sont explicites. Voir [le bilan de version](../MVP_0_2_1_REPORT.md). Ces preuves conviennent à une première évaluation de laboratoire ; elles ne valident pas un déploiement industriel.

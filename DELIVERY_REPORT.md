@@ -1,3 +1,5 @@
+> Historical MVP 0.2 delivery. Current release: [MVP_0_2_1_REPORT.md](MVP_0_2_1_REPORT.md).
+
 # Relatório de entrega — X ColdShield MVP 0.2
 
 ## Diagnóstico original

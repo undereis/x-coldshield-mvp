@@ -129,6 +129,7 @@ class GatewayReviewTests(unittest.TestCase):
 
     def test_second_gateway_cannot_share_runtime_lease(self):
         class NoNetworkServer:
+            server_address = ("127.0.0.1", 12345)
             def server_close(self):
                 pass
 

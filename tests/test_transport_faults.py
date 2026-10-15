@@ -72,10 +72,10 @@ class TransportFaultTests(unittest.TestCase):
         self.assertEqual(reply.pdu,b'\x86\x0b')
         self.assertEqual(events[0]['decision'],'FAILED')
 
-    def test_valid_device_exception_is_rejected_not_acknowledged(self):
+    def test_valid_device_failure_is_unknown_not_acknowledged(self):
         reply,events=self.exercise('exception')
         self.assertEqual(reply.pdu,b'\x86\x04')
-        self.assertEqual(events[0]['decision'],'REJECTED')
+        self.assertEqual(events[0]['decision'],'UNKNOWN')
 
     def test_malformed_defrost_response_prevents_start(self):
         reply,events=self.exercise('malformed',defrost=True)

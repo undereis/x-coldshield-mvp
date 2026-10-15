@@ -2,6 +2,7 @@
 from dataclasses import dataclass
 from typing import Literal
 
+from .limits import CLIENT_TIMEOUT
 from .protocol import ProtocolError, exchange, validate_response, write_frame
 
 
@@ -22,7 +23,7 @@ def send_write(port, register, value):
         if type(value) is not int or not -32768 <= value <= 32767:
             raise ValueError("Value must be a signed 16-bit integer")
         request = write_frame(register, value)
-        response = validate_response(request, exchange(port, request, timeout=1.5))
+        response = validate_response(request, exchange(port, request, timeout=CLIENT_TIMEOUT))
     except (OSError, ProtocolError, ValueError, OverflowError) as exc:
         return CommandResult("UNAVAILABLE", f"No verified acknowledgement: {exc}. Outcome unknown; inspect telemetry and audit before retrying.")
     if response.function == 0x86:
