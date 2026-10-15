@@ -23,7 +23,23 @@ An independent read-only candidate review identified the exception-4 uncertainty
 
 ## Verification and evidence
 
-Final clean-checkout measurements and artifact links are appended after immutable source validation below. Earlier development checks ran all 162 tests in both Python 3.11.15 and 3.14.6 with zero failures/errors/skips. The automated demonstration is also exercised by the suite. Complete raw v0.2 results remain unchanged in `docs/test-results-python*`.
+Executed 15 October 2026 on macOS arm64, clean source commit `6c4d4395aa3ede31528632cd440f98dca5c961bb`, branch `codex/mvp-v0.2.1`. Both runs recorded unchanged clean Git state and source manifests before/after. Source digest: `1c5961cde43dc3ae54d6c5999d6a07d356c5033cc8ce2327c4cbb782ed11744e`. Subsequent release evidence/documentation commits leave this measured source digest unchanged. CI additionally tests the exact published revision.
+
+| Python | Tests | Failures | Errors | Skips | Measured verifier duration | Result |
+| --- | ---: | ---: | ---: | ---: | ---: | --- |
+| 3.11.15 | 162 | 0 | 0 | 0 | 6.865964 s | PASSED |
+| 3.14.6 | 162 | 0 | 0 | 0 | 6.905903 s | PASSED |
+
+These durations cover verification/discovery and are not throughput or latency benchmarks. The independent automated demo passed all 13 rows (11 protocol transactions plus maintenance open/close). Both child processes exited with status 0, private maintenance was closed and the complete demo manifest's hashes were verified. The suite also runs a real subprocess demo once per Python version.
+
+Retained evidence:
+
+- [Python 3.11 JSON](docs/evidence-v0.2.1/python311/evidence.json) and [transcript](docs/evidence-v0.2.1/python311/transcript.txt).
+- [Python 3.14 JSON](docs/evidence-v0.2.1/python314/evidence.json) and [transcript](docs/evidence-v0.2.1/python314/transcript.txt).
+- [Demonstration report](docs/evidence-v0.2.1/demo-report.md), [JSON](docs/evidence-v0.2.1/demo-report.json), [audit export](docs/evidence-v0.2.1/demo-audit-export.json), and [complete demo bundle](docs/evidence-v0.2.1/demo-bundle.tar.gz). Extract the bundle to verify its internal `manifest.json`, including runtime state/database and logs.
+- [SHA-256 evidence manifest](docs/evidence-v0.2.1/checksums.json).
+
+Complete raw v0.2 results remain unchanged in `docs/test-results-python*`. The earlier targeted unittest invocation by module name exposed an existing sibling import convention; the supported `discover -s tests` command and verifier both use the correct collection path. No collection error was excluded from final results.
 
 Reproduce from a clean checkout with hash-pinned dependencies:
 
@@ -56,3 +72,43 @@ ACKNOWLEDGED means a matching FC06 reply, DENIED means a policy/protocol refusal
 Version 0.3 should prioritize authenticated administration, archive/reconciliation recovery, parser fuzzing/soak measurements, clock/storage fault testing and specialist review with explicit acceptance criteria. No real-equipment test is authorized by this release.
 
 Recommendation: suitable for an initial technical presentation as an isolated prototype when accompanied by the measured evidence and these limits. It is not suitable for controlling industrial equipment. Incubator acceptance, partner interest and commercial value remain unvalidated.
+
+## Changed files
+
+- `.github/workflows/tests.yml`
+- `ARCHITECTURE.md`
+- `DELIVERY_REPORT.md`
+- `MVP_0_2_1_REPORT.md`
+- `README.md`
+- `ROADMAP.md`
+- `SECURITY.md`
+- `TEST_REPORT.md`
+- `coldshield/__init__.py`
+- `coldshield/audit_export.py`
+- `coldshield/client.py`
+- `coldshield/config.py`
+- `coldshield/gateway.py`
+- `coldshield/limits.py`
+- `coldshield/maintenance.py`
+- `coldshield/protocol.py`
+- `coldshield/server.py`
+- `coldshield/simulator.py`
+- `coldshield/storage.py`
+- `danfoss_sim.py`
+- `docs/DEMO.md`
+- `docs/INCUBATOR_BRIEF_EN.md`
+- `docs/INCUBATOR_BRIEF_FR.md`
+- `scripts/demo.py`
+- `scripts/verify.py`
+- `tests/expected_inventory.json`
+- `tests/test_demo_v021.py`
+- `tests/test_evidence_v021.py`
+- `tests/test_gateway_review.py`
+- `tests/test_gateway_v021.py`
+- `tests/test_maintenance_v021.py`
+- `tests/test_protocol_deadlines_v021.py`
+- `tests/test_sessions_v021.py`
+- `tests/test_storage_v021.py`
+- `tests/test_transport_faults.py`
+- `x_coldshield_proxy.py`
+- `docs/evidence-v0.2.1/`: retained measured reports, transcripts, export and complete demo bundle.

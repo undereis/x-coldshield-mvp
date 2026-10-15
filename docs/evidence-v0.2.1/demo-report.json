@@ -1,0 +1,318 @@
+{
+  "artifacts": {
+    "audit-export.json": "dcfcf4096bdce1f52672d7b7a51e676f1a6544df99f739b1fa71f801b2f30c68",
+    "gateway.log": "cc105fdd6d176247010e2bdfc52849e72c731fe9ab0d6be34d85be4cc1155796",
+    "policy.json": "1b0bdbfe0ba49ee379ad7ff2df7b6b14deb2b11d0891fc91eee3933edb39bfac",
+    "policy.json.lock": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "runtime/audit.sqlite3": "fd6dc1b7df20509f9a22d9cd010b4f6f6de8cbd1511c816798c528fa6aabd61d",
+    "runtime/gateway.lock": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "runtime/simulator_state.json": "727f9d8fef300e8e3dc59b652c162604c575262d66a52601cec2db5eca8e1b3c",
+    "simulator.log": "0309db8c7757385fc82ef33bf5ef8fdb0336678c9271a40286eef29a357c452f"
+  },
+  "audit_export": "audit-export.json",
+  "code_version": "0.2.1",
+  "commands": [
+    {
+      "audit_event_ids": [
+        1
+      ],
+      "code_version": "0.2.1",
+      "command": "CLOSED: legitimate setpoint -22",
+      "decision": "BLOCKED",
+      "function": 6,
+      "reason": "MAINTENANCE_CLOSED",
+      "request_hex": "00650000000601060000ffea",
+      "request_id": "6649ccdd-4f82-409e-85f4-d7d788cdbac6",
+      "response_hex": "006500000003018603",
+      "result": "PASSED",
+      "revision": "6c4d4395aa3ede31528632cd440f98dca5c961bb",
+      "status": "DENIED",
+      "timestamp_utc": "2026-10-15T13:21:20.102979+00:00",
+      "transaction_id": 101
+    },
+    {
+      "audit_event_ids": [
+        2,
+        3
+      ],
+      "code_version": "0.2.1",
+      "command": "CLOSED: verify unchanged temperature",
+      "decision": "ACKNOWLEDGED",
+      "function": 3,
+      "reason": "VALIDATED_RESPONSE",
+      "register_values": [
+        -20
+      ],
+      "request_hex": "006600000006010300000001",
+      "request_id": "a90ad8b1-4d33-436a-9c4b-af4659808174",
+      "response_hex": "006600000005010302ffec",
+      "result": "PASSED",
+      "revision": "6c4d4395aa3ede31528632cd440f98dca5c961bb",
+      "status": "ACKNOWLEDGED",
+      "timestamp_utc": "2026-10-15T13:21:20.122720+00:00",
+      "transaction_id": 102
+    },
+    {
+      "code_version": "0.2.1",
+      "command": "python -m coldshield.maintenance open",
+      "decision": "OPEN",
+      "exit_code": 0,
+      "reason": "POLICY_STATE_VERIFIED",
+      "request_id": null,
+      "result": "PASSED",
+      "revision": "6c4d4395aa3ede31528632cd440f98dca5c961bb",
+      "stderr": "",
+      "stdout": "{\n  \"enabled\": true,\n  \"starts_at\": \"2026-10-15T13:21:20.176944+00:00\",\n  \"expires_at\": \"2026-10-15T13:26:20.176944+00:00\"\n}\n",
+      "timestamp_utc": "2026-10-15T13:21:20.128571+00:00",
+      "transaction_id": null
+    },
+    {
+      "audit_event_ids": [
+        4,
+        5
+      ],
+      "code_version": "0.2.1",
+      "command": "OPEN: legitimate setpoint -22",
+      "decision": "ACKNOWLEDGED",
+      "function": 6,
+      "reason": "VALIDATED_RESPONSE",
+      "request_hex": "00670000000601060000ffea",
+      "request_id": "0cf24c11-3e97-4227-9872-c38bb965c616",
+      "response_hex": "00670000000601060000ffea",
+      "result": "PASSED",
+      "revision": "6c4d4395aa3ede31528632cd440f98dca5c961bb",
+      "status": "ACKNOWLEDGED",
+      "timestamp_utc": "2026-10-15T13:21:20.184003+00:00",
+      "transaction_id": 103
+    },
+    {
+      "audit_event_ids": [
+        6,
+        7
+      ],
+      "code_version": "0.2.1",
+      "command": "OPEN: verify legitimate temperature",
+      "decision": "ACKNOWLEDGED",
+      "function": 3,
+      "reason": "VALIDATED_RESPONSE",
+      "register_values": [
+        -22
+      ],
+      "request_hex": "006800000006010300000001",
+      "request_id": "588a068c-47e2-4ba7-ad46-514e361f12c5",
+      "response_hex": "006800000005010302ffea",
+      "result": "PASSED",
+      "revision": "6c4d4395aa3ede31528632cd440f98dca5c961bb",
+      "status": "ACKNOWLEDGED",
+      "timestamp_utc": "2026-10-15T13:21:20.189161+00:00",
+      "transaction_id": 104
+    },
+    {
+      "audit_event_ids": [
+        8
+      ],
+      "code_version": "0.2.1",
+      "command": "OPEN: unsafe setpoint +50",
+      "decision": "BLOCKED",
+      "function": 6,
+      "reason": "THERMAL_LIMIT",
+      "request_hex": "006900000006010600000032",
+      "request_id": "7e2c3525-c6a5-4734-8e54-85761b7e796f",
+      "response_hex": "006900000003018603",
+      "result": "PASSED",
+      "revision": "6c4d4395aa3ede31528632cd440f98dca5c961bb",
+      "status": "DENIED",
+      "timestamp_utc": "2026-10-15T13:21:20.192405+00:00",
+      "transaction_id": 105
+    },
+    {
+      "audit_event_ids": [
+        9,
+        10
+      ],
+      "code_version": "0.2.1",
+      "command": "OPEN: verify blocked temperature",
+      "decision": "ACKNOWLEDGED",
+      "function": 3,
+      "reason": "VALIDATED_RESPONSE",
+      "register_values": [
+        -22
+      ],
+      "request_hex": "006a00000006010300000001",
+      "request_id": "c4052234-baf2-4c98-8cb2-c0a1b1dbe425",
+      "response_hex": "006a00000005010302ffea",
+      "result": "PASSED",
+      "revision": "6c4d4395aa3ede31528632cd440f98dca5c961bb",
+      "status": "ACKNOWLEDGED",
+      "timestamp_utc": "2026-10-15T13:21:20.193871+00:00",
+      "transaction_id": 106
+    },
+    {
+      "audit_event_ids": [
+        11,
+        12
+      ],
+      "code_version": "0.2.1",
+      "command": "OPEN: defrost register 10 ON",
+      "decision": "ACKNOWLEDGED",
+      "function": 6,
+      "reason": "VALIDATED_RESPONSE",
+      "request_hex": "006b000000060106000a0001",
+      "request_id": "7c2fa9a2-c19e-4b11-b76c-b5cec1e9a5fb",
+      "response_hex": "006b000000060106000a0001",
+      "result": "PASSED",
+      "revision": "6c4d4395aa3ede31528632cd440f98dca5c961bb",
+      "status": "ACKNOWLEDGED",
+      "timestamp_utc": "2026-10-15T13:21:20.196886+00:00",
+      "transaction_id": 107
+    },
+    {
+      "audit_event_ids": [
+        13,
+        14
+      ],
+      "code_version": "0.2.1",
+      "command": "OPEN: defrost register 11 ON",
+      "decision": "BLOCKED",
+      "function": 6,
+      "reason": "DEFROST_INTERLOCK",
+      "request_hex": "006c000000060106000b0001",
+      "request_id": "5d26bca0-926a-4314-bc82-21f24a23bc80",
+      "response_hex": "006c00000003018603",
+      "result": "PASSED",
+      "revision": "6c4d4395aa3ede31528632cd440f98dca5c961bb",
+      "status": "DENIED",
+      "timestamp_utc": "2026-10-15T13:21:20.201592+00:00",
+      "transaction_id": 108
+    },
+    {
+      "audit_event_ids": [
+        15,
+        16
+      ],
+      "code_version": "0.2.1",
+      "command": "OPEN: verify defrost state",
+      "decision": "ACKNOWLEDGED",
+      "function": 3,
+      "reason": "VALIDATED_RESPONSE",
+      "register_values": [
+        1,
+        0,
+        0
+      ],
+      "request_hex": "006d000000060103000a0003",
+      "request_id": "247119af-a0cb-4a67-a0ed-18f564888bbd",
+      "response_hex": "006d00000009010306000100000000",
+      "result": "PASSED",
+      "revision": "6c4d4395aa3ede31528632cd440f98dca5c961bb",
+      "status": "ACKNOWLEDGED",
+      "timestamp_utc": "2026-10-15T13:21:20.206012+00:00",
+      "transaction_id": 109
+    },
+    {
+      "audit_event_ids": [
+        17
+      ],
+      "code_version": "0.2.1",
+      "command": "OPEN: unsupported FC16",
+      "decision": "BLOCKED",
+      "function": 16,
+      "reason": "FUNCTION_NOT_ALLOWED",
+      "request_hex": "006e00000009011000000001020032",
+      "request_id": "d1732f4e-8417-490c-aea3-1d0686b7ca02",
+      "response_hex": "006e00000003019001",
+      "result": "PASSED",
+      "revision": "6c4d4395aa3ede31528632cd440f98dca5c961bb",
+      "status": "DENIED",
+      "timestamp_utc": "2026-10-15T13:21:20.209703+00:00",
+      "transaction_id": 110
+    },
+    {
+      "audit_event_ids": [
+        18
+      ],
+      "code_version": "0.2.1",
+      "command": "OPEN: unsupported register 999",
+      "decision": "BLOCKED",
+      "function": 6,
+      "reason": "REGISTER_NOT_ALLOWED",
+      "request_hex": "006f00000006010603e7ffea",
+      "request_id": "89fcac5c-94ec-437d-aa4e-a56c4a2e869d",
+      "response_hex": "006f00000003018602",
+      "result": "PASSED",
+      "revision": "6c4d4395aa3ede31528632cd440f98dca5c961bb",
+      "status": "DENIED",
+      "timestamp_utc": "2026-10-15T13:21:20.211160+00:00",
+      "transaction_id": 111
+    },
+    {
+      "code_version": "0.2.1",
+      "command": "python -m coldshield.maintenance close",
+      "decision": "CLOSED",
+      "exit_code": 0,
+      "reason": "POLICY_STATE_VERIFIED",
+      "request_id": null,
+      "result": "PASSED",
+      "revision": "6c4d4395aa3ede31528632cd440f98dca5c961bb",
+      "stderr": "",
+      "stdout": "{\n  \"enabled\": false,\n  \"starts_at\": null,\n  \"expires_at\": null\n}\n",
+      "timestamp_utc": "2026-10-15T13:21:20.212382+00:00",
+      "transaction_id": null
+    }
+  ],
+  "completed_utc": "2026-10-15T13:21:20.296082+00:00",
+  "errors": [],
+  "maintenance_closed": true,
+  "processes": [
+    {
+      "code_version": "0.2.1",
+      "command": [
+        "python",
+        "danfoss_sim.py",
+        "--port",
+        "55543",
+        "--runtime-dir",
+        "<output>/runtime"
+      ],
+      "exit_code": 0,
+      "host": "127.0.0.1",
+      "log": "simulator.log",
+      "name": "simulator",
+      "pid": 12532,
+      "port": 55543,
+      "revision": "6c4d4395aa3ede31528632cd440f98dca5c961bb",
+      "stopped": true,
+      "timestamp_utc": "2026-10-15T13:21:19.950439+00:00"
+    },
+    {
+      "code_version": "0.2.1",
+      "command": [
+        "python",
+        "x_coldshield_proxy.py",
+        "--port",
+        "55544",
+        "--upstream-port",
+        "55543",
+        "--policy",
+        "<output>/policy.json",
+        "--runtime-dir",
+        "<output>/runtime"
+      ],
+      "exit_code": 0,
+      "host": "127.0.0.1",
+      "log": "gateway.log",
+      "name": "gateway",
+      "pid": 12538,
+      "port": 55544,
+      "revision": "6c4d4395aa3ede31528632cd440f98dca5c961bb",
+      "stopped": true,
+      "timestamp_utc": "2026-10-15T13:21:20.027492+00:00"
+    }
+  ],
+  "result": "PASSED",
+  "revision": "6c4d4395aa3ede31528632cd440f98dca5c961bb",
+  "schema_version": 1,
+  "scope": "synthetic loopback laboratory, 127.0.0.1 only",
+  "successful": true,
+  "timestamp_utc": "2026-10-15T13:21:19.946877+00:00"
+}
